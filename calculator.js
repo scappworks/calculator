@@ -1,3 +1,4 @@
+let started = false;
 let add = (a, b) => a + b;
 let subtract = (a, b) => a - b;
 let multiply = (a, b) => a * b;
@@ -30,6 +31,10 @@ function arrangeButtons() {
     buttonsArray.forEach(function(button, index) {
         assignButtonLocation(button, index);
     });
+
+    const clrButton = document.querySelector("#clear-button");
+
+    clearButton(clrButton);
 }
 
 function assignButtonLocation(button, index) {
@@ -190,6 +195,8 @@ function wireButtons(button, index) {
                     newChild.innerHTML = button.firstChild.innerHTML;
                     screen.appendChild(newChild);
                 }
+
+                started = true;
             }
 
             else {
@@ -211,6 +218,8 @@ function wireButtons(button, index) {
                     }
 
                     screen.appendChild(newChild);
+
+                    started = true;
                 }
 
                 else {
@@ -219,23 +228,59 @@ function wireButtons(button, index) {
 
                     if (index < 10) {
                         addToChild = index;
+
+                        if (!(started)) {
+                            oldChild.innerHTML = addToChild;
+                        }
+
+                        else {
+                            oldChild.innerHTML += addToChild;
+                        }
                     }
     
                     else {
                         addToChild = button.firstChild.innerHTML;
+                        oldChild.innerHTML += addToChild;
                     }
-    
-                    oldChild.innerHTML += addToChild;
+
+                    started = true;
                 }
         }
     }
+
+    else {
+        let screenArray = Array.from(screen.firstChild.innerHTML.split(""));
+        let separationArray = [];
+
+        screenArray.forEach(function(item) {
+            separationArray.push(item);
+        });
+
+        console.log(separationArray);
+    }
+    });
+}
+
+function clearButton(button) {
+    button.addEventListener("click", function() {
+        let screen = document.querySelector("#screen");
+        screen.removeChild(screen.firstChild);
+
+        let newChild = document.createElement("h2");
+        newChild.innerHTML = 0;
+        screen.appendChild(newChild);
+
+        started = false;
     });
 }
 
 function clearDefault() {
     const screen = document.querySelector("#screen");
-
     screen.removeChild(screen.firstChild);
+    
+    let newChild = document.createElement("h2");
+    newChild.innerHTML = 0;
+    screen.appendChild(newChild);
 }
 
 arrangeButtons();
