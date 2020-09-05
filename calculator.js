@@ -245,19 +245,13 @@ function wireButtons(button, index) {
 
                     started = true;
                 }
+            }
         }
-    }
 
-    else {
-        let screenArray = Array.from(screen.firstChild.innerHTML.split(""));
-        let separationArray = [];
-
-        screenArray.forEach(function(item) {
-            separationArray.push(item);
-        });
-
-        console.log(separationArray);
-    }
+        else {
+            let screenArray = Array.from(screen.firstChild.innerHTML.split(""));
+            let separationArray = [];
+        }
     });
 }
 
