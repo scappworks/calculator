@@ -249,8 +249,36 @@ function wireButtons(button, index) {
         }
 
         else {
-            let screenArray = Array.from(screen.firstChild.innerHTML.split(""));
-            let separationArray = [];
+            let numbersForEquation = [];
+            let fullInputWord = screen.firstChild.innerHTML;
+            let fullWordArray = Array.from(fullInputWord);
+            let operationsArray = [];
+            let operationToUse = "";
+            let answer;
+
+            fullWordArray.forEach(function(item, index) {
+                if (item === "+" || item === "-" || item === "*" || item === "/") {
+                    operationsArray.push(item);
+                }
+            });
+
+            do {
+                for (i = 0; i < operationsArray.length; i++) {
+                    operationToUse = operationsArray[i];
+                    let nextNumber = fullInputWord.substring(0, fullInputWord.indexOf(operationToUse));
+                    numbersForEquation.push(nextNumber);
+                    fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse), fullInputWord.length);
+                    nextNumber = fullInputWord.substring(fullInputWord.indexOf(operationToUse), 1);
+                    numbersForEquation.push(nextNumber);
+                    fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse) + 1, fullInputWord.length);
+                    nextNumber = fullInputWord;
+                    numbersForEquation.push(nextNumber);
+                    fullInputWord = "";
+
+                    //answer = operate(operationToUse, numbersForEquation.indexOf(i - 1), numbersForEquation.indexOf(i + 1));
+                    /******************************************************************************************HERE ********************************** */
+                }
+            } while(fullInputWord.length > 0);
         }
     });
 }
