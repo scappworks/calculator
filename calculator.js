@@ -262,8 +262,10 @@ function wireButtons(button, index) {
                 }
             });
 
+            for (i = 0; i < operationsArray.length; i++) {
+                if (i === operationsArray.length - 1) {
             do {
-                for (i = 0; i < operationsArray.length; i++) {
+               
                     operationToUse = operationsArray[i];
                     let nextNumber = fullInputWord.substring(0, fullInputWord.indexOf(operationToUse));
                     numbersForEquation.push(nextNumber);
@@ -274,11 +276,19 @@ function wireButtons(button, index) {
                     nextNumber = fullInputWord;
                     numbersForEquation.push(nextNumber);
                     fullInputWord = "";
+                
+                    let operationIndex = numbersForEquation.indexOf(operationToUse);
 
-                    //answer = operate(operationToUse, numbersForEquation.indexOf(i - 1), numbersForEquation.indexOf(i + 1));
-                    /******************************************************************************************HERE ********************************** */
-                }
+                    console.log("A " + numbersForEquation[operationIndex - 1]);
+                    console.log("B " + numbersForEquation[operationIndex + 1]);
+                    answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
+                        parseInt(numbersForEquation[operationIndex + 1]));
+                    console.log(operationToUse);
+                    console.log(answer);
+                
             } while(fullInputWord.length > 0);
+        }
+        }
         }
     });
 }
