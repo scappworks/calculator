@@ -263,9 +263,8 @@ function wireButtons(button, index) {
             });
 
             for (i = 0; i < operationsArray.length; i++) {
-                if (i === operationsArray.length - 1) {
-            do {
-               
+
+                if (i === operationsArray.length - 1 && operationsArray.length > 1) {
                     operationToUse = operationsArray[i];
                     let nextNumber = fullInputWord.substring(0, fullInputWord.indexOf(operationToUse));
                     numbersForEquation.push(nextNumber);
@@ -275,8 +274,29 @@ function wireButtons(button, index) {
                     fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse) + 1, fullInputWord.length);
                     nextNumber = fullInputWord;
                     numbersForEquation.push(nextNumber);
-                    fullInputWord = "";
-                
+                }
+
+                else {
+                    operationToUse = operationsArray[i];
+                    let nextNumber = fullInputWord.substring(0, fullInputWord.indexOf(operationToUse));
+                    numbersForEquation.push(nextNumber);
+                    fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse), fullInputWord.length);
+                    nextNumber = fullInputWord.substring(fullInputWord.indexOf(operationToUse), 1);
+                    numbersForEquation.push(nextNumber);
+                    fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse) + 1, fullInputWord.length);
+                    nextNumber = fullInputWord;
+
+                    if (i === operationsArray.length - 1) {
+                    numbersForEquation.push(nextNumber);
+                    }
+                    
+                    else {
+                        fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse) + 1, fullInputWord.length);
+                        nextNumber = fullInputWord.substring(0, operationsArray[i + 1].length);
+                        numbersForEquation.push(nextNumber);
+                    }
+                }
+
                     let operationIndex = numbersForEquation.indexOf(operationToUse);
 
                     console.log("A " + numbersForEquation[operationIndex - 1]);
@@ -285,10 +305,7 @@ function wireButtons(button, index) {
                         parseInt(numbersForEquation[operationIndex + 1]));
                     console.log(operationToUse);
                     console.log(answer);
-                
-            } while(fullInputWord.length > 0);
-        }
-        }
+            }
         }
     });
 }
