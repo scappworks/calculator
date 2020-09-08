@@ -263,7 +263,6 @@ function wireButtons(button, index) {
             });
 
             for (i = 0; i < operationsArray.length; i++) {
-
                 if (i === operationsArray.length - 1 && operationsArray.length > 1) {
                     operationToUse = operationsArray[i];
                     let nextNumber = fullInputWord.substring(0, fullInputWord.indexOf(operationToUse));
@@ -287,7 +286,7 @@ function wireButtons(button, index) {
                     nextNumber = fullInputWord;
 
                     if (i === operationsArray.length - 1) {
-                    numbersForEquation.push(nextNumber);
+                        numbersForEquation.push(nextNumber);
                     }
                     
                     else {
@@ -297,17 +296,70 @@ function wireButtons(button, index) {
                     }
                 }
 
-                    let operationIndex = numbersForEquation.indexOf(operationToUse);
+                let operationIndex = numbersForEquation.indexOf(operationToUse);
 
-                    console.log("A " + numbersForEquation[operationIndex - 1]);
-                    console.log("B " + numbersForEquation[operationIndex + 1]);
-                    answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
-                        parseInt(numbersForEquation[operationIndex + 1]));
-                    console.log(operationToUse);
-                    console.log(answer);
+                console.log("A " + numbersForEquation[operationIndex - 1]);
+                console.log("B " + numbersForEquation[operationIndex + 1]);
+                answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
+                    parseInt(numbersForEquation[operationIndex + 1]));
+                console.log(operationToUse);
+                console.log(answer);
             }
+
+            console.log(pemdas(numbersForEquation));
         }
     });
+}
+
+function pemdas(arr) {
+    let tempBefore;
+    let temp;
+    let tempAfter;
+    let beforeLastOperator;
+    let lastOperator;
+    let afterLastOperator;
+    let lastOperatorIndex;
+    let finished = false;
+    let switchHappened = false;
+
+    console.log("arr in " + arr);
+
+    while (!(finished)) {
+    arr.forEach(function(item, index) {
+        if (item === "+" || item === "-" || item === "*" || item === "/") {
+            if (lastOperator === "+" || lastOperator === "-") {
+                if (item === "*" || item === "/") {
+                    tempBefore = arr[index - 1];
+                    temp = item;
+                    tempAfter = arr[index + 1];
+
+                    arr[index - 1] = beforeLastOperator;
+                    arr[index] = lastOperator;
+                    arr[index + 1] = afterLastOperator;
+
+                    arr[lastOperatorIndex - 1] = tempBefore;
+                    arr[lastOperatorIndex] = temp;
+                    arr[lastOperatorIndex + 1] = tempAfter;
+
+                    switchHappened = true;
+                }
+            }
+
+            if (!(switchHappened)) {
+                finished = true;
+            }
+
+            beforeLastOperator = arr[index - 1];
+            lastOperator = item;
+            afterLastOperator = arr[index + 1];
+            lastOperatorIndex = index;
+
+            switchHappened = false;
+        }
+    });
+}
+
+    return arr;
 }
 
 function clearButton(button) {
