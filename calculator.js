@@ -311,7 +311,9 @@ function wireButtons(button, index) {
                     answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
                         parseFloat(numbersForEquation[operationIndex + 1]));
 
-                    for (i = 0; i < operationIndex; i++) {
+                        
+
+                    for (i = 0; i <= operationIndex; i++) {
                         numbersForEquation.shift();
                         numbersForEquation.unshift(answer.toFixed(2));
                         console.log(numbersForEquation);
@@ -329,7 +331,7 @@ function wireButtons(button, index) {
                         }
                 }
                 console.log(operationToUse);
-                console.log(answer.toFixed(2));
+                console.log(answer);
         }
     });
 }
