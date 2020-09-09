@@ -20,6 +20,10 @@ let operate = (operator, a, b) => {
         break;
     }
 
+    if (parseFloat(answer % 1 !== 0)) {
+        answer = answer.toFixed(2);
+    }
+
     return answer;
 };
 
@@ -214,7 +218,6 @@ function wireButtons(button, index) {
                     else {
                         newChild.innerHTML = button.firstChild.innerHTML;
                         screen.appendChild(newChild);
-                        console.log(button.firstChild);
                     }
 
                     screen.appendChild(newChild);
@@ -295,71 +298,92 @@ function wireButtons(button, index) {
                         numbersForEquation.push(nextNumber);
                     }
                 }
-
-                let operationIndex = numbersForEquation.indexOf(operationToUse);
-
-                console.log("A " + numbersForEquation[operationIndex - 1]);
-                console.log("B " + numbersForEquation[operationIndex + 1]);
-                answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
-                    parseInt(numbersForEquation[operationIndex + 1]));
-                console.log(operationToUse);
-                console.log(answer);
             }
 
-            console.log(pemdas(numbersForEquation));
+            numbersForEquation = pemdas(numbersForEquation);
+                let operationIndex = numbersForEquation.indexOf(operationToUse);
+
+                console.log(numbersForEquation);
+                console.log("A " + numbersForEquation[operationIndex - 1]);
+                console.log("B " + numbersForEquation[operationIndex + 1]);
+
+                if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0) {
+                    answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
+                        parseFloat(numbersForEquation[operationIndex + 1]));
+
+                    for (i = 0; i < operationIndex; i++) {
+                        numbersForEquation.shift();
+                        numbersForEquation.unshift(answer.toFixed(2));
+                        console.log(numbersForEquation);
+                    }
+                }
+
+                else {
+                    answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
+                        parseInt(numbersForEquation[operationIndex + 1]));
+
+                        for (i = 0; i < operationIndex; i++) {
+                            numbersForEquation.shift();
+                            numbersForEquation.unshift(answer);
+                            console.log(numbersForEquation);
+                        }
+                }
+                console.log(operationToUse);
+                console.log(answer.toFixed(2));
         }
     });
 }
 
 function pemdas(arr) {
+    let pemdasArray = arr;
     let tempBefore;
     let temp;
     let tempAfter;
-    let beforeLastOperator;
-    let lastOperator;
-    let afterLastOperator;
-    let lastOperatorIndex;
     let finished = false;
     let switchHappened = false;
 
-    console.log("arr in " + arr);
-
+    console.log("in " + arr);
     while (!(finished)) {
-    arr.forEach(function(item, index) {
-        if (item === "+" || item === "-" || item === "*" || item === "/") {
-            if (lastOperator === "+" || lastOperator === "-") {
-                if (item === "*" || item === "/") {
-                    tempBefore = arr[index - 1];
-                    temp = item;
-                    tempAfter = arr[index + 1];
+        if (pemdasArray.length > 3) {
+            for (i = 0; i < pemdasArray.length - 1; i++) {
+                for (j = i + 1; j < pemdasArray.length - 1; j++) {
+                    if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
+                        if (pemdasArray[j] === "*" || pemdasArray[j] === "/") {
+                            if (pemdasArray[i] === "+" || pemdasArray[i] === "-") {
+                                tempBefore = pemdasArray[j - 1];
+                                temp = pemdasArray[j];
+                                tempAfter = pemdasArray[j + 1];
 
-                    arr[index - 1] = beforeLastOperator;
-                    arr[index] = lastOperator;
-                    arr[index + 1] = afterLastOperator;
+                                pemdasArray[j - 1] = pemdasArray[i - 1];
+                                pemdasArray[j] = pemdasArray[i];
+                                pemdasArray[j + 1] = pemdasArray[i + 1];
 
-                    arr[lastOperatorIndex - 1] = tempBefore;
-                    arr[lastOperatorIndex] = temp;
-                    arr[lastOperatorIndex + 1] = tempAfter;
+                                pemdasArray[i - 1] = tempBefore;
+                                pemdasArray[i] = temp;
+                                pemdasArray[i + 1] = tempAfter;
 
-                    switchHappened = true;
+                                switchHappened = true;
+                            }
+                        }
+
+                        if (!(switchHappened) || i === pemdasArray.length) {
+                            finished = true;
+                        }
+
+                        switchHappened = false;
+                    }
                 }
             }
-
-            if (!(switchHappened)) {
-                finished = true;
-            }
-
-            beforeLastOperator = arr[index - 1];
-            lastOperator = item;
-            afterLastOperator = arr[index + 1];
-            lastOperatorIndex = index;
-
-            switchHappened = false;
         }
-    });
-}
 
-    return arr;
+        else {
+            finished = true;
+            switchHappened = true;
+        }
+    }
+
+    console.log("out " + pemdasArray);
+    return pemdasArray;
 }
 
 function clearButton(button) {
