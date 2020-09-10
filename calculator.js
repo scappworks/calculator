@@ -307,31 +307,48 @@ function wireButtons(button, index) {
                 console.log("A " + numbersForEquation[operationIndex - 1]);
                 console.log("B " + numbersForEquation[operationIndex + 1]);
 
-                if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0) {
+                while (numbersForEquation.length > 1) {
+                if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0 ||
+                parseFloat(numbersForEquation[operationIndex + 1]) % 1 !== 0) {
                     answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
                         parseFloat(numbersForEquation[operationIndex + 1]));
-
                         
-
-                    for (i = 0; i <= operationIndex; i++) {
+                    for (i = 0; i <= operationIndex + 2; i++) {
                         numbersForEquation.shift();
-                        numbersForEquation.unshift(answer.toFixed(2));
                         console.log(numbersForEquation);
                     }
+
+                    numbersForEquation.unshift(answer.toFixed(2));
                 }
 
                 else {
                     answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
                         parseInt(numbersForEquation[operationIndex + 1]));
 
-                        for (i = 0; i < operationIndex; i++) {
+                        for (i = 0; i <= operationIndex + 2; i++) {
                             numbersForEquation.shift();
-                            numbersForEquation.unshift(answer);
-                            console.log(numbersForEquation);
+                            
                         }
+
+                        numbersForEquation.unshift(answer);
+                        console.log(numbersForEquation);
+                }
+
+                let changedOperation = false;
+
+                for (i = 0; i < numbersForEquation.length - 1; i++) {
+                    if (numbersForEquation[i] === "+" || numbersForEquation[i] === "-" ||
+                    numbersForEquation[i] === "*" || numbersForEquation[i] === "/") {
+                        if (!(changedOperation)) {
+                            operationToUse = numbersForEquation[i];
+                            changedOperation = true;
+                        }
+                    }
                 }
                 console.log(operationToUse);
                 console.log(answer);
+                console.log("end arr " + numbersForEquation);
+            }
         }
     });
 }
@@ -344,6 +361,12 @@ function pemdas(arr) {
     let finished = false;
     let switchHappened = false;
 
+    for (i = 0; i < pemdasArray.length - 1; i++) {
+        if (pemdasArray[i] === pemdasArray[i + 1]) {
+            pemdasArray.splice(pemdasArray[i + 2], 1);
+        }
+    }
+
     console.log("in " + arr);
     while (!(finished)) {
         if (pemdasArray.length > 3) {
@@ -352,18 +375,91 @@ function pemdas(arr) {
                     if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
                         if (pemdasArray[j] === "*" || pemdasArray[j] === "/") {
                             if (pemdasArray[i] === "+" || pemdasArray[i] === "-") {
-                                tempBefore = pemdasArray[j - 1];
-                                temp = pemdasArray[j];
-                                tempAfter = pemdasArray[j + 1];
+                                if (pemdasArray[i - 2] !== "-" || pemdasArray[j - 2] !== "-" ||
+                                pemdasArray[i + 1] !== "-" || pemdasArray[j + 1] !== "-") {
+                                    tempBefore = pemdasArray[j - 1];
+                                    temp = pemdasArray[j];
+                                    tempAfter = pemdasArray[j + 1];
 
-                                pemdasArray[j - 1] = pemdasArray[i - 1];
-                                pemdasArray[j] = pemdasArray[i];
-                                pemdasArray[j + 1] = pemdasArray[i + 1];
+                                    pemdasArray[j - 1] = pemdasArray[i - 1];
+                                    pemdasArray[j] = pemdasArray[i];
+                                    pemdasArray[j + 1] = pemdasArray[i + 1];
 
-                                pemdasArray[i - 1] = tempBefore;
-                                pemdasArray[i] = temp;
-                                pemdasArray[i + 1] = tempAfter;
+                                    pemdasArray[i - 1] = tempBefore;
+                                    pemdasArray[i] = temp;
+                                    pemdasArray[i + 1] = tempAfter;
+                                }
 
+                                if (pemdasArray[i - 2] === "-") {
+                                    tempBefore = pemdasArray[j - 1];
+                                    temp = pemdasArray[j];
+                                    tempAfter = pemdasArray[j + 1];
+
+                                    pemdasArray[j - 1] = pemdasArray[i - 2] + pemdasArray[i - 1];
+                                    pemdasArray[j] = pemdasArray[i];
+                                    pemdasArray[j + 1] = pemdasArray[i + 1];
+
+                                    pemdasArray[i - 1] = tempBefore;
+                                    pemdasArray[i] = temp;
+                                    pemdasArray[i + 1] = tempAfter;
+                                }
+
+                                if (pemdasArray[j - 2] === "-") {
+                                    tempBefore = pemdasArray[j - 2] + pemdasArray[j - 1];
+                                    temp = pemdasArray[j];
+                                    tempAfter = pemdasArray[j + 1];
+
+                                    pemdasArray[j - 1] = pemdasArray[i - 1];
+                                    pemdasArray[j] = pemdasArray[i];
+                                    pemdasArray[j + 1] = pemdasArray[i + 1];
+
+                                    pemdasArray[i - 1] = tempBefore;
+                                    pemdasArray[i] = temp;
+                                    pemdasArray[i + 1] = tempAfter;
+                                }
+
+                                if (pemdasArray[i + 1] === "-") {
+                                    tempBefore = pemdasArray[j - 1];
+                                    temp = pemdasArray[j];
+                                    tempAfter = pemdasArray[j + 1];
+
+                                    pemdasArray[j - 1] = pemdasArray[i - 1];
+                                    pemdasArray[j] = pemdasArray[i];
+                                    pemdasArray[j + 1] = pemdasArray[i + 1] + pemdasArray[i + 2];
+
+                                    pemdasArray[i - 1] = tempBefore;
+                                    pemdasArray[i] = temp;
+                                    pemdasArray[i + 1] = tempAfter;
+                                }
+
+                                if (pemdasArray[j + 1] === "-") {
+                                    tempBefore = pemdasArray[j - 1];
+                                    temp = pemdasArray[j];
+                                    tempAfter = pemdasArray[j + 1] + pemdasArray[j + 2];
+
+                                    pemdasArray[j - 1] = pemdasArray[i - 1];
+                                    pemdasArray[j] = pemdasArray[i];
+                                    pemdasArray[j + 1] = pemdasArray[i + 1];
+
+                                    pemdasArray[i - 1] = tempBefore;
+                                    pemdasArray[i] = temp;
+                                    pemdasArray[i + 1] = tempAfter;
+                                }
+/*
+                                else {
+                                    tempBefore = pemdasArray[j - 2] + pemdasArray[j - 1];
+                                    temp = pemdasArray[j];
+                                    tempAfter = pemdasArray[j + 1];
+
+                                    pemdasArray[j - 1] = pemdasArray[i - 1];
+                                    pemdasArray[j] = pemdasArray[i];
+                                    pemdasArray[j + 1] = pemdasArray[i + 1];
+
+                                    pemdasArray[i - 1] = tempBefore;
+                                    pemdasArray[i] = temp;
+                                    pemdasArray[i + 1] = tempAfter;
+                                }
+*/
                                 switchHappened = true;
                             }
                         }
