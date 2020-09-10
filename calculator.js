@@ -266,7 +266,7 @@ function wireButtons(button, index) {
             });
 
             for (i = 0; i < operationsArray.length; i++) {
-                if (i === operationsArray.length - 1 && operationsArray.length > 1) {
+                if (operationsArray.length === 1) {
                     operationToUse = operationsArray[i];
                     let nextNumber = fullInputWord.substring(0, fullInputWord.indexOf(operationToUse));
                     numbersForEquation.push(nextNumber);
@@ -291,16 +291,11 @@ function wireButtons(button, index) {
                     if (i === operationsArray.length - 1) {
                         numbersForEquation.push(nextNumber);
                     }
-                    
-                    else {
-                        fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse) + 1, fullInputWord.length);
-                        nextNumber = fullInputWord.substring(0, operationsArray[i + 1].length);
-                        numbersForEquation.push(nextNumber);
-                    }
                 }
             }
 
             numbersForEquation = pemdas(numbersForEquation);
+            operationToUse = operationsArray[0];
                 let operationIndex = numbersForEquation.indexOf(operationToUse);
 
                 console.log(numbersForEquation);
@@ -308,48 +303,52 @@ function wireButtons(button, index) {
                 console.log("B " + numbersForEquation[operationIndex + 1]);
 
                 while (numbersForEquation.length > 1) {
-                if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0 ||
-                parseFloat(numbersForEquation[operationIndex + 1]) % 1 !== 0) {
-                    answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
-                        parseFloat(numbersForEquation[operationIndex + 1]));
-                        
-                    for (i = 0; i <= operationIndex + 2; i++) {
-                        numbersForEquation.shift();
-                        console.log(numbersForEquation);
-                    }
-
-                    numbersForEquation.unshift(answer.toFixed(2));
-                }
-
-                else {
-                    answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
-                        parseInt(numbersForEquation[operationIndex + 1]));
-
-                        for (i = 0; i <= operationIndex + 2; i++) {
+                    if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0 ||
+                    parseFloat(numbersForEquation[operationIndex + 1]) % 1 !== 0) {
+                        answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
+                            parseFloat(numbersForEquation[operationIndex + 1]));
+                            /*
+                        for (i = 0; i <= operationIndex + 1; i++) {
                             numbersForEquation.shift();
-                            
+                            console.log(numbersForEquation);
                         }
+*/
+                       // numbersForEquation.unshift(answer.toFixed(2));
+                    }
 
-                        numbersForEquation.unshift(answer);
-                        console.log(numbersForEquation);
-                }
+                    else {
+                        answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
+                            parseInt(numbersForEquation[operationIndex + 1]));
 
-                let changedOperation = false;
+                            
 
-                for (i = 0; i < numbersForEquation.length - 1; i++) {
-                    if (numbersForEquation[i] === "+" || numbersForEquation[i] === "-" ||
-                    numbersForEquation[i] === "*" || numbersForEquation[i] === "/") {
-                        if (!(changedOperation)) {
-                            operationToUse = numbersForEquation[i];
-                            changedOperation = true;
+                            
+                    }
+
+                    for (i = 0; i <= operationIndex + 1; i++) {
+                        if (operationIndex + 1 > 1) {
+                        numbersForEquation.shift();
                         }
                     }
+
+                    let changedOperation = false;
+
+                    for (i = 0; i < numbersForEquation.length - 1; i++) {
+                        if (numbersForEquation[i] === "+" || numbersForEquation[i] === "-" ||
+                        numbersForEquation[i] === "*" || numbersForEquation[i] === "/") {
+                            if (!(changedOperation) && i === numbersForEquation.length - 2) {
+                                operationToUse = numbersForEquation[i];
+                                changedOperation = true;
+                                numbersForEquation.unshift(answer);
+                            }
+                        }
+                    }
+                    
+                    console.log(operationToUse);
+                    console.log(answer);
+                    console.log("end arr " + numbersForEquation);
                 }
-                console.log(operationToUse);
-                console.log(answer);
-                console.log("end arr " + numbersForEquation);
             }
-        }
     });
 }
 
@@ -361,12 +360,13 @@ function pemdas(arr) {
     let finished = false;
     let switchHappened = false;
 
+    /*
     for (i = 0; i < pemdasArray.length - 1; i++) {
         if (pemdasArray[i] === pemdasArray[i + 1]) {
-            pemdasArray.splice(pemdasArray[i + 2], 1);
+            pemdasArray.splice(pemdasArray[i + 1], 1);
         }
     }
-
+*/
     console.log("in " + arr);
     while (!(finished)) {
         if (pemdasArray.length > 3) {
