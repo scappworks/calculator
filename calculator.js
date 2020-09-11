@@ -240,6 +240,18 @@ function wireButtons(button, index) {
                             oldChild.innerHTML += addToChild;
                         }
                     }
+
+                    else if (index === 13) {
+                        addToChild = button.firstChild.innerHTML;
+
+                        if (!(started)) {
+                            oldChild.innerHTML = addToChild;
+                        }
+
+                        else {
+                            oldChild.innerHTML += addToChild;
+                        }
+                    }
     
                     else {
                         addToChild = button.firstChild.innerHTML;
@@ -365,13 +377,27 @@ function pemdas(arr) {
         if (pemdasArray.length > 3) {
             for (i = 0; i < pemdasArray.length - 1; i++) {
                 for (j = i + 1; j < pemdasArray.length - 1; j++) {
+                    if (pemdasArray[i] === "-" && i === 0) {
+                        pemdasArray[i + 1] = pemdasArray[i] + pemdasArray[i + 1];
+                                    pemdasArray.shift();
+                    }
                     if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
+                        if (pemdasArray[j] === "-" && i > 0) {
+                            if (pemdasArray.indexOf(pemdasArray[j + 1]) === pemdasArray.length - 1) {
+                                pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
+                                pemdasArray.pop();
+                            }
+
+                            else {
+                                pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
+                                pemdasArray.slice(pemdasArray.indexOf(pemdasArray[j + 1]),
+                                pemdasArray.indexOf(pemdasArray[j + 2]));
+                            }
+                        }
+
                         if (pemdasArray[j] === "*" || pemdasArray[j] === "/") {
                             if (pemdasArray[i] === "+" || pemdasArray[i] === "-") {
-                                if (i === 0) {
-                                    pemdasArray[i + 1] = pemdasArray[i] + pemdasArray[i + 1];
-                                    pemdasArray.shift();
-                                }
+                                
                                 
                                     tempBefore = pemdasArray[j - 1];
                                     temp = pemdasArray[j];
@@ -384,12 +410,12 @@ function pemdas(arr) {
                                     pemdasArray[i - 1] = tempBefore;
                                     pemdasArray[i] = temp;
                                     pemdasArray[i + 1] = tempAfter;
-
+                                
                                 
                                 switchHappened = true;
                             }
                         }
-
+/*
                         else if (pemdasArray[j] === "+" || pemdasArray[j] === "-") {
                             if (pemdasArray[i] === "*" || pemdasArray[i] === "/") {
                                 /*
@@ -421,16 +447,7 @@ function pemdas(arr) {
                                 pemdasArray[i + 1] = tempAfter;
                             }
 */
-                            if (pemdasArray[i + 1] === "-") {
-                                if (pemdasArray.indexOf(pemdasArray[j + 1]) === pemdasArray.length - 1) {
-                                    pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
-                                    pemdasArray.pop();
-                                }
-
-                                else {
-
-                                }
-                            }
+                            
 /*
                             if (pemdasArray[j + 1] === "-") {
                                 tempBefore = pemdasArray[j - 1];
@@ -445,12 +462,12 @@ function pemdas(arr) {
                                 pemdasArray[i] = temp;
                                 pemdasArray[i + 1] = tempAfter;
                             }
-*/
+
                             console.log("else happened");
                             switchHappened = true;
                         }
                         }
-
+*/
                         if (!(switchHappened) || i === pemdasArray.length) {
                             finished = true;
                         }
@@ -459,7 +476,8 @@ function pemdas(arr) {
                     }
                 }
             }
-        }
+            }
+    //}
 
         else {
             finished = true;
