@@ -378,7 +378,7 @@ function pemdas(arr) {
             for (i = 0; i < pemdasArray.length - 1; i++) {
                 for (j = i + 1; j < pemdasArray.length - 1; j++) {
                     if (pemdasArray[i] === "-" && i === 0) {
-                        pemdasArray[i + 1] = pemdasArray[i] + pemdasArray[i + 1];
+                        pemdasArray[j] = pemdasArray[i] + pemdasArray[j];
                                     pemdasArray.shift();
                     }
                     if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
@@ -390,9 +390,10 @@ function pemdas(arr) {
 
                             else {
                                 pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
-                                pemdasArray.slice(pemdasArray.indexOf(pemdasArray[j + 1]),
-                                pemdasArray.indexOf(pemdasArray[j + 2]));
+                                pemdasArray.splice(j + 1, 1);
                             }
+
+                            console.log("after negatives " + pemdasArray);
                         }
 
                         if (pemdasArray[j] === "*" || pemdasArray[j] === "/") {
@@ -413,6 +414,8 @@ function pemdas(arr) {
                                 
                                 
                                 switchHappened = true;
+
+                                console.log("after replace " + pemdasArray);
                             }
                         }
 /*
