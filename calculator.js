@@ -281,13 +281,17 @@ function wireButtons(button, index) {
                 if (operationsArray.length === 1) {
                     operationToUse = operationsArray[i];
                     let nextNumber = fullInputWord.substring(0, fullInputWord.indexOf(operationToUse));
+                    if (nextNumber !== "") {
                     numbersForEquation.push(nextNumber);
+                    }
                     fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse), fullInputWord.length);
                     nextNumber = fullInputWord.substring(fullInputWord.indexOf(operationToUse), 1);
                     numbersForEquation.push(nextNumber);
                     fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse) + 1, fullInputWord.length);
                     nextNumber = fullInputWord;
+                    if (nextNumber !== "") {
                     numbersForEquation.push(nextNumber);
+                    }
                 }
 
                 else {
@@ -304,8 +308,13 @@ function wireButtons(button, index) {
 
                     if (i === operationsArray.length - 1) {
                         numbersForEquation.push(nextNumber);
+                        console.log(numbersForEquation);
                     }
                 }
+            }
+
+            if (numbersForEquation.length === 0) {
+                numbersForEquation.push(fullInputWord);
             }
 
             numbersForEquation = pemdas(numbersForEquation);
@@ -384,7 +393,7 @@ function pemdas(arr) {
 
     console.log("in " + arr);
     while (!(finished)) {
-        if (pemdasArray.length > 3) {
+        if (pemdasArray.length > 1) {
             switchHappened = true;
 
             while(switchHappened) {
@@ -436,8 +445,48 @@ function pemdas(arr) {
         console.log("finished negatives " + pemdasArray);
     }
 }
+        }
 
+        if (pemdasArray.length === 1) {
+            console.log("single value " + pemdasArray[0]);
+        }
 
+        if (pemdasArray.length === 2) {
+            if (pemdasArray[0] === "*" || pemdasArray[0] === "/" || pemdasArray[0] === "+") {
+                pemdasArray.unshift(0);
+                console.log("two val " + pemdasArray);
+            }
+
+            if (pemdasArray[0] === "-") {
+                if (pemdasArray[1] !== "*" || pemdasArray[1] !== "/" ||
+                    pemdasArray[1] !== "+" || pemdasArray[1] !== "-" || pemdasArray[1] !== ".") {
+                        pemdasArray[0] = pemdasArray[0] + pemdasArray[1];
+                        pemdasArray.pop();
+                        console.log("two val " + pemdasArray);
+            }
+
+            else {
+                console.log("ERROR");
+            }
+
+            if (pemdasArray[1] === "*" || pemdasArray[1] === "/" ||
+                    pemdasArray[1] === "+" || pemdasArray[1] === "-") {
+                        console.log("ERROR");
+                    }
+
+            if (pemdasArray[1] === ".") {
+                pemdasArray[0] = pemdasArray[0] + pemdasArray[1] + "0";
+                pemdasArray.pop();
+                console.log("two val " + pemdasArray);
+            }
+        }
+
+        if (pemdasArray[1] === "-") {
+            console.log("ERROR");
+        }
+    }
+
+        if (pemdasArray.length >= 3) {
             for (i = 0; i < pemdasArray.length - 1; i++) {
                 for (j = i + 1; j < pemdasArray.length - 1; j++) {
                         if (pemdasArray[j] === "*" || pemdasArray[j] === "/") {
