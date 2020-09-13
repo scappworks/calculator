@@ -322,21 +322,27 @@ function wireButtons(button, index) {
                 let operationIndex = numbersForEquation.indexOf(operationToUse);
 
                 for ( i = 0; i < numbersForEquation.length - 1; i++) {
-                console.log(numbersForEquation[i]);
+                //console.log(numbersForEquation[i]);
                 }
-                console.log("A " + numbersForEquation[operationIndex - 1]);
-                console.log("B " + numbersForEquation[operationIndex + 1]);
+                //console.log("A " + numbersForEquation[operationIndex - 1]);
+                //console.log("B " + numbersForEquation[operationIndex + 1]);
 
                 while (numbersForEquation.length > 1) {
                     if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0 ||
                     parseFloat(numbersForEquation[operationIndex + 1]) % 1 !== 0) {
                         answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
                             parseFloat(numbersForEquation[operationIndex + 1]));
+
+                            console.log("A " + parseFloat(numbersForEquation[operationIndex - 1]));
+                            console.log("B "+ parseFloat(numbersForEquation[operationIndex + 1]));
                     }
 
                     else {
                         answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
                             parseInt(numbersForEquation[operationIndex + 1]));
+
+                            console.log("A " + parseInt(numbersForEquation[operationIndex - 1]));
+                            console.log("B "+ parseInt(numbersForEquation[operationIndex + 1]));
                     }
 
                     for (i = 0; i <= operationIndex + 1; i++) {
@@ -347,10 +353,12 @@ function wireButtons(button, index) {
 
                     let changedOperation = false;
 
+                    console.log(operationToUse);
+
                     for (i = 0; i < numbersForEquation.length - 1; i++) {
                         if (numbersForEquation[i] === "+" || numbersForEquation[i] === "-" ||
                         numbersForEquation[i] === "*" || numbersForEquation[i] === "/") {
-                            if (!(changedOperation) && i === numbersForEquation.length - 2) {
+                            if (!(changedOperation)) {
                                 operationToUse = numbersForEquation[i];
                                 changedOperation = true;
                                 numbersForEquation.unshift(answer);
@@ -358,7 +366,7 @@ function wireButtons(button, index) {
                         }
                     }
                     
-                    console.log(operationToUse);
+                    //console.log(operationToUse);
                     console.log(answer);
                     console.log("end arr " + numbersForEquation);
                 }
@@ -384,7 +392,10 @@ function pemdas(arr) {
 
                 for (i = 0; i < pemdasArray.length - 1; i++) {
                     for (j = i + 1; j < pemdasArray.length - 1; j++) {
-                
+                        if (j > i + 1) {
+                            break;
+                        }
+
             if (pemdasArray[i] === "-" && i === 0) {
                 pemdasArray[j] = pemdasArray[i] + pemdasArray[j];
                             pemdasArray.shift();
@@ -401,7 +412,7 @@ function pemdas(arr) {
                     }
 
                     
-                    else if (pemdasArray[i] === "-" && pemdasArray[j] === "-" && j === i + 1) {
+                    if (pemdasArray[i] === "-" && pemdasArray[j] === "-" && j === i + 1) {
                         pemdasArray[j + 1] = pemdasArray[j] + pemdasArray[j + 1];
                         pemdasArray.splice(j, 1);
 
@@ -409,22 +420,20 @@ function pemdas(arr) {
                     }
                         
 
-                        else {
+                    else {
                         pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
                         pemdasArray.splice(j + 1, 1);
 
                         console.log("negative in middle of array " + pemdasArray);
                         }
                     }
-
-                    
                 }
             }
         }
-    }
 
     if (compareArray === pemdasArray) {
         switchHappened = false;
+        console.log("finished negatives " + pemdasArray);
     }
 }
 
@@ -433,7 +442,13 @@ function pemdas(arr) {
                 for (j = i + 1; j < pemdasArray.length - 1; j++) {
                         if (pemdasArray[j] === "*" || pemdasArray[j] === "/") {
                             if (pemdasArray[i] === "+" || pemdasArray[i] === "-") {
-                                pemdasArray[j + 1] = operate(pemdasArray[j], pemdasArray[j - 1], pemdasArray[j + 1]);
+                                if (parseFloat(pemdasArray[j - 1]) % 1 !== 0 || parseFloat(pemdasArray[j + 1]) % 1 !== 0) {
+                                pemdasArray[j + 1] = operate(pemdasArray[j], parseFloat(pemdasArray[j - 1]), parseFloat(pemdasArray[j + 1])).toFixed(2);
+                                }
+
+                                else {
+                                    pemdasArray[j + 1] = operate(pemdasArray[j], parseInt(pemdasArray[j - 1]), parseInt(pemdasArray[j + 1]));
+                                }
                                 pemdasArray.splice(j - 1, 2);
                                 j = i + 1;
                                 
