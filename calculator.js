@@ -321,7 +321,9 @@ function wireButtons(button, index) {
             operationToUse = operationsArray[0];
                 let operationIndex = numbersForEquation.indexOf(operationToUse);
 
-                console.log(numbersForEquation);
+                for ( i = 0; i < numbersForEquation.length - 1; i++) {
+                console.log(numbersForEquation[i]);
+                }
                 console.log("A " + numbersForEquation[operationIndex - 1]);
                 console.log("B " + numbersForEquation[operationIndex + 1]);
 
@@ -378,7 +380,7 @@ function pemdas(arr) {
             switchHappened = true;
 
             while(switchHappened) {
-                let tempArr = pemdasArray;
+                let compareArray = pemdasArray;
 
                 for (i = 0; i < pemdasArray.length - 1; i++) {
                     for (j = i + 1; j < pemdasArray.length - 1; j++) {
@@ -398,11 +400,21 @@ function pemdas(arr) {
                         console.log("negative at end " + pemdasArray);
                     }
 
-                    else {
+                    
+                    else if (pemdasArray[i] === "-" && pemdasArray[j] === "-" && j === i + 1) {
+                        pemdasArray[j + 1] = pemdasArray[j] + pemdasArray[j + 1];
+                        pemdasArray.splice(j, 1);
+
+                        console.log("double neg " + pemdasArray);
+                    }
+                        
+
+                        else {
                         pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
                         pemdasArray.splice(j + 1, 1);
 
                         console.log("negative in middle of array " + pemdasArray);
+                        }
                     }
 
                     
@@ -411,7 +423,7 @@ function pemdas(arr) {
         }
     }
 
-    if (tempArr === pemdasArray) {
+    if (compareArray === pemdasArray) {
         switchHappened = false;
     }
 }
@@ -423,6 +435,7 @@ function pemdas(arr) {
                             if (pemdasArray[i] === "+" || pemdasArray[i] === "-") {
                                 pemdasArray[j + 1] = operate(pemdasArray[j], pemdasArray[j - 1], pemdasArray[j + 1]);
                                 pemdasArray.splice(j - 1, 2);
+                                j = i + 1;
                                 
                                 switchHappened = true;
 
