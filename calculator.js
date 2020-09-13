@@ -375,102 +375,61 @@ function pemdas(arr) {
     console.log("in " + arr);
     while (!(finished)) {
         if (pemdasArray.length > 3) {
+            switchHappened = true;
+
+            while(switchHappened) {
+                let tempArr = pemdasArray;
+
+                for (i = 0; i < pemdasArray.length - 1; i++) {
+                    for (j = i + 1; j < pemdasArray.length - 1; j++) {
+                
+            if (pemdasArray[i] === "-" && i === 0) {
+                pemdasArray[j] = pemdasArray[i] + pemdasArray[j];
+                            pemdasArray.shift();
+                            console.log("first negative " + pemdasArray);
+            }
+
+            if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
+                if (pemdasArray[j] === "-" && i > 0) {
+                    if (pemdasArray.indexOf(pemdasArray[j + 1]) === pemdasArray.length - 1) {
+                        pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
+                        pemdasArray.pop();
+
+                        console.log("negative at end " + pemdasArray);
+                    }
+
+                    else {
+                        pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
+                        pemdasArray.splice(j + 1, 1);
+
+                        console.log("negative in middle of array " + pemdasArray);
+                    }
+
+                    
+                }
+            }
+        }
+    }
+
+    if (tempArr === pemdasArray) {
+        switchHappened = false;
+    }
+}
+
+
             for (i = 0; i < pemdasArray.length - 1; i++) {
                 for (j = i + 1; j < pemdasArray.length - 1; j++) {
-                    if (pemdasArray[i] === "-" && i === 0) {
-                        pemdasArray[j] = pemdasArray[i] + pemdasArray[j];
-                                    pemdasArray.shift();
-                    }
-                    if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
-                        if (pemdasArray[j] === "-" && i > 0) {
-                            if (pemdasArray.indexOf(pemdasArray[j + 1]) === pemdasArray.length - 1) {
-                                pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
-                                pemdasArray.pop();
-                            }
-
-                            else {
-                                pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
-                                pemdasArray.splice(j + 1, 1);
-                            }
-
-                            console.log("after negatives " + pemdasArray);
-                        }
-
                         if (pemdasArray[j] === "*" || pemdasArray[j] === "/") {
                             if (pemdasArray[i] === "+" || pemdasArray[i] === "-") {
-                                
-                                
-                                    tempBefore = pemdasArray[j - 1];
-                                    temp = pemdasArray[j];
-                                    tempAfter = pemdasArray[j + 1];
-
-                                    pemdasArray[j - 1] = pemdasArray[i - 1];
-                                    pemdasArray[j] = pemdasArray[i];
-                                    pemdasArray[j + 1] = pemdasArray[i + 1];
-
-                                    pemdasArray[i - 1] = tempBefore;
-                                    pemdasArray[i] = temp;
-                                    pemdasArray[i + 1] = tempAfter;
-                                
+                                pemdasArray[j + 1] = operate(pemdasArray[j], pemdasArray[j - 1], pemdasArray[j + 1]);
+                                pemdasArray.splice(j - 1, 2);
                                 
                                 switchHappened = true;
 
                                 console.log("after replace " + pemdasArray);
                             }
                         }
-/*
-                        else if (pemdasArray[j] === "+" || pemdasArray[j] === "-") {
-                            if (pemdasArray[i] === "*" || pemdasArray[i] === "/") {
-                                /*
-                            if (pemdasArray[i - 2] === "-") {
-                                tempBefore = pemdasArray[j - 1];
-                                temp = pemdasArray[j];
-                                tempAfter = pemdasArray[j + 1];
 
-                                pemdasArray[j - 1] = pemdasArray[i - 2] + pemdasArray[i - 1];
-                                pemdasArray[j] = pemdasArray[i];
-                                pemdasArray[j + 1] = pemdasArray[i + 1];
-
-                                pemdasArray[i - 1] = tempBefore;
-                                pemdasArray[i] = temp;
-                                pemdasArray[i + 1] = tempAfter;
-                            }
-
-                            if (pemdasArray[j - 2] === "-") {
-                                tempBefore = pemdasArray[j - 2] + pemdasArray[j - 1];
-                                temp = pemdasArray[j];
-                                tempAfter = pemdasArray[j + 1];
-
-                                pemdasArray[j - 1] = pemdasArray[i - 1];
-                                pemdasArray[j] = pemdasArray[i];
-                                pemdasArray[j + 1] = pemdasArray[i + 1];
-
-                                pemdasArray[i - 1] = tempBefore;
-                                pemdasArray[i] = temp;
-                                pemdasArray[i + 1] = tempAfter;
-                            }
-*/
-                            
-/*
-                            if (pemdasArray[j + 1] === "-") {
-                                tempBefore = pemdasArray[j - 1];
-                                temp = pemdasArray[j];
-                                tempAfter = pemdasArray[j + 1] + pemdasArray[j + 2];
-
-                                pemdasArray[j - 1] = pemdasArray[i - 1];
-                                pemdasArray[j] = pemdasArray[i];
-                                pemdasArray[j + 1] = pemdasArray[i + 1];
-
-                                pemdasArray[i - 1] = tempBefore;
-                                pemdasArray[i] = temp;
-                                pemdasArray[i + 1] = tempAfter;
-                            }
-
-                            console.log("else happened");
-                            switchHappened = true;
-                        }
-                        }
-*/
                         if (!(switchHappened) || i === pemdasArray.length) {
                             finished = true;
                         }
@@ -479,8 +438,6 @@ function pemdas(arr) {
                     }
                 }
             }
-            }
-    //}
 
         else {
             finished = true;
