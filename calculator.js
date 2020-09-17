@@ -306,7 +306,7 @@ function wireButtons(button, index) {
                     fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse) + 1, fullInputWord.length);
                     nextNumber = fullInputWord;
 
-                    if (i === operationsArray.length - 1) {
+                    if (i === operationsArray.length - 1 && nextNumber !== "") {
                         numbersForEquation.push(nextNumber);
                         console.log(numbersForEquation);
                     }
@@ -443,6 +443,8 @@ function pemdas(arr) {
     if (compareArray === pemdasArray) {
         switchHappened = false;
         console.log("finished negatives " + pemdasArray);
+        console.log("finished negatives " + pemdasArray[0]);
+        console.log("finished negatives " + pemdasArray[1]);
     }
 }
         }
@@ -458,22 +460,26 @@ function pemdas(arr) {
             }
 
             if (pemdasArray[0] === "-") {
-                if (pemdasArray[1] !== "*" || pemdasArray[1] !== "/" ||
-                    pemdasArray[1] !== "+" || pemdasArray[1] !== "-" || pemdasArray[1] !== ".") {
-                        pemdasArray[0] = pemdasArray[0] + pemdasArray[1];
+                
+                if (pemdasArray[1] !== "*" && pemdasArray[1] !== "/" &&
+                    pemdasArray[1] !== "+" && pemdasArray[1] !== "-" && pemdasArray[1] !== ".") {
+                        pemdasArray[0] = pemdasArray[0] + pemdasArray[1];                  
                         pemdasArray.pop();
                         console.log("two val " + pemdasArray);
             }
-
-            else {
-                console.log("ERROR");
+            
+/*
+            if (pemdasArray[1] !== "+") {
+                pemdasArray[0] = pemdasArray[0] + pemdasArray[1];                  
+                        pemdasArray.pop();
+                        console.log("two val " + pemdasArray);
             }
-
+/*
             if (pemdasArray[1] === "*" || pemdasArray[1] === "/" ||
                     pemdasArray[1] === "+" || pemdasArray[1] === "-") {
                         console.log("ERROR");
                     }
-
+*/
             if (pemdasArray[1] === ".") {
                 pemdasArray[0] = pemdasArray[0] + pemdasArray[1] + "0";
                 pemdasArray.pop();
@@ -484,6 +490,7 @@ function pemdas(arr) {
         if (pemdasArray[1] === "-") {
             console.log("ERROR");
         }
+        
     }
 
         if (pemdasArray.length >= 3) {
