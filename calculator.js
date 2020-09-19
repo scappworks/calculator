@@ -329,12 +329,18 @@ function wireButtons(button, index) {
             
             operationToUse = operationsArray[0];
                 let operationIndex = numbersForEquation.indexOf(operationToUse);
+                let allOperatorCheck = true;
 
-                for ( i = 0; i < numbersForEquation.length - 1; i++) {
-                //console.log(numbersForEquation[i]);
+                for (i = 0; i < numbersForEquation.length - 1; i++) {
+                    if (numbersForEquation[i] !== "+" && numbersForEquation[i] !== "-" &&
+                    numbersForEquation[i] !== "*" && numbersForEquation[i] !== "/" && numbersForEquation[i] !== ".") {
+                        allOperatorCheck = false;
+                    }
                 }
-                //console.log("A " + numbersForEquation[operationIndex - 1]);
-                //console.log("B " + numbersForEquation[operationIndex + 1]);
+
+                if (allOperatorCheck) {
+                    numbersForEquation = [];
+                }
 
                 while (numbersForEquation.length > 1) {
                     if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0 ||
@@ -354,6 +360,11 @@ function wireButtons(button, index) {
                             console.log("B "+ parseInt(numbersForEquation[operationIndex + 1]));
                     }
 
+                    if (isNaN(parseFloat(numbersForEquation[operationIndex - 1])) &&
+                    isNaN(parseFloat(numbersForEquation[operationIndex + 1]))) {
+                        answer = "ERROR";
+                    }
+
                     for (i = 0; i <= operationIndex + 1; i++) {
                         if (operationIndex + 1 > 1) {
                         numbersForEquation.shift();
@@ -368,9 +379,15 @@ function wireButtons(button, index) {
                         if (numbersForEquation[i] === "+" || numbersForEquation[i] === "-" ||
                         numbersForEquation[i] === "*" || numbersForEquation[i] === "/") {
                             if (!(changedOperation)) {
+                                if (answer !== "ERROR") {
                                 operationToUse = numbersForEquation[i];
                                 changedOperation = true;
                                 numbersForEquation.unshift(answer);
+                                }
+
+                                else {
+                                    numbersForEquation = [answer];
+                                }
                             }
                         }
                     }
