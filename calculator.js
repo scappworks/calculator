@@ -402,9 +402,6 @@ function wireButtons(button, index) {
 
 function pemdas(arr) {
     let pemdasArray = arr;
-    let tempBefore;
-    let temp;
-    let tempAfter;
     let finished = false;
     let switchHappened = false;
 
@@ -484,19 +481,7 @@ function pemdas(arr) {
                         pemdasArray.pop();
                         console.log("two val " + pemdasArray);
             }
-            
-/*
-            if (pemdasArray[1] !== "+") {
-                pemdasArray[0] = pemdasArray[0] + pemdasArray[1];                  
-                        pemdasArray.pop();
-                        console.log("two val " + pemdasArray);
-            }
-/*
-            if (pemdasArray[1] === "*" || pemdasArray[1] === "/" ||
-                    pemdasArray[1] === "+" || pemdasArray[1] === "-") {
-                        console.log("ERROR");
-                    }
-*/
+
             if (pemdasArray[1] === ".") {
                 pemdasArray[0] = pemdasArray[0] + pemdasArray[1] + "0";
                 pemdasArray.pop();
@@ -527,6 +512,8 @@ function pemdas(arr) {
                                 
                                 switchHappened = true;
 
+
+
                                 console.log("after replace " + pemdasArray);
                             }
                         }
@@ -536,6 +523,15 @@ function pemdas(arr) {
                         }
 
                         switchHappened = false;
+                    }
+                }
+
+                if (pemdasArray.length === 3) {
+                    if (pemdasArray[0] === "-" || pemdasArray[0] === "+" ||
+                    pemdasArray[0] === "*" || pemdasArray[0] === "/") {
+                        if (!(isNaN(pemdasArray[pemdasArray.length]))) {
+                            pemdasArray = ["ERROR"];
+                        }
                     }
                 }
             }
