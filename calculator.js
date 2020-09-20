@@ -420,9 +420,15 @@ function pemdas(arr) {
                         }
 
             if (pemdasArray[i] === "-" && i === 0) {
+                if (pemdasArray[j] !== "-") {
                 pemdasArray[j] = pemdasArray[i] + pemdasArray[j];
                             pemdasArray.shift();
                             console.log("first negative " + pemdasArray);
+                }
+
+                else {
+                    pemdasArray = ["ERROR"];
+                }
             }
 
             if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
