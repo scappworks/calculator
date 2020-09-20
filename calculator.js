@@ -347,22 +347,41 @@ function wireButtons(button, index) {
                     parseFloat(numbersForEquation[operationIndex + 1]) % 1 !== 0) {
                         answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
                             parseFloat(numbersForEquation[operationIndex + 1])).toFixed(2);
+                            
+                            if (isNaN(parseFloat(answer))) {
+                                answer = "ERROR";
+                            }
 
-                            console.log("A " + parseFloat(numbersForEquation[operationIndex - 1]).toFixed(2));
-                            console.log("B "+ parseFloat(numbersForEquation[operationIndex + 1]).toFixed(2));
+                            screen.removeChild(screen.firstChild);
+                            let newChild = document.createElement("h2");
+                            newChild.innerHTML = answer;
+                            screen.appendChild(newChild);
                     }
 
                     else {
                         answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
                             parseInt(numbersForEquation[operationIndex + 1]));
 
-                            console.log("A " + parseInt(numbersForEquation[operationIndex - 1]));
-                            console.log("B "+ parseInt(numbersForEquation[operationIndex + 1]));
+                            if (isNaN(parseInt(answer))) {
+                                answer = "ERROR";
+                            }
+
+                            screen.removeChild(screen.firstChild);
+                            let newChild = document.createElement("h2");
+                            newChild.innerHTML = answer;
+                            screen.appendChild(newChild);
                     }
 
-                    if (isNaN(parseFloat(numbersForEquation[operationIndex - 1])) &&
-                    isNaN(parseFloat(numbersForEquation[operationIndex + 1]))) {
+                    if (isNaN(parseFloat(numbersForEquation[operationIndex - 1])) ||
+                    isNaN(parseFloat(numbersForEquation[operationIndex + 1])) ||
+                    isNaN(parseInt(numbersForEquation[operationIndex - 1])) ||
+                    isNaN(parseInt(numbersForEquation[operationIndex + 1]))) {
                         answer = "ERROR";
+
+                        screen.removeChild(screen.firstChild);
+                            let newChild = document.createElement("h2");
+                            newChild.innerHTML = answer;
+                            screen.appendChild(newChild);
                     }
 
                     for (i = 0; i <= operationIndex + 1; i++) {
@@ -386,14 +405,19 @@ function wireButtons(button, index) {
                                 }
 
                                 else {
+                                    if (numbersForEquation.length > 0) {
                                     numbersForEquation = [answer];
+
+                                    screen.removeChild(screen.firstChild);
+                            let newChild = document.createElement("h2");
+                            newChild.innerHTML = answer;
+                            screen.appendChild(newChild);
+                                    }
                                 }
                             }
                         }
                     }
-                    
-                    //console.log(operationToUse);
-                    console.log(answer);
+
                     console.log("end arr " + numbersForEquation);
                 }
             }
@@ -433,7 +457,7 @@ function pemdas(arr) {
 
             if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
                 if (pemdasArray[j] === "-" && i > 0) {
-                    if (pemdasArray.indexOf(pemdasArray[j + 1]) === pemdasArray.length - 1) {
+                    if (j + 1 === pemdasArray.length - 1) {
                         pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
                         pemdasArray.pop();
 
@@ -450,8 +474,10 @@ function pemdas(arr) {
                         
 
                     else {
+                        if (j + 1 < pemdasArray.length - 1) {
                         pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
                         pemdasArray.splice(j + 1, 1);
+                        }
 
                         console.log("negative in middle of array " + pemdasArray);
                         }
@@ -480,7 +506,6 @@ function pemdas(arr) {
             }
 
             if (pemdasArray[0] === "-") {
-                
                 if (pemdasArray[1] !== "*" && pemdasArray[1] !== "/" &&
                     pemdasArray[1] !== "+" && pemdasArray[1] !== "-" && pemdasArray[1] !== ".") {
                         pemdasArray[0] = pemdasArray[0] + pemdasArray[1];                  
@@ -496,6 +521,7 @@ function pemdas(arr) {
         }
 
         if (pemdasArray[1] === "-") {
+            pemdasArray = ["ERROR"];
             console.log("ERROR");
         }
         
@@ -517,8 +543,6 @@ function pemdas(arr) {
                                 j = i + 1;
                                 
                                 switchHappened = true;
-
-
 
                                 console.log("after replace " + pemdasArray);
                             }
@@ -546,6 +570,15 @@ function pemdas(arr) {
             finished = true;
             switchHappened = true;
         }
+    }
+
+    if (pemdasArray[0] === "+" || pemdasArray[0] === "-" ||
+    pemdasArray[0] === "*" || pemdasArray[0] === "/" || pemdasArray[0] === "." || pemdasArray.length === 0) {
+        pemdasArray = ["ERROR"];
+    }
+
+    if (pemdasArray.length === 0) {
+        pemdasArray = ["ERROR"];
     }
 
     console.log("out " + pemdasArray);
