@@ -346,10 +346,10 @@ function wireButtons(button, index) {
                     if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0 ||
                     parseFloat(numbersForEquation[operationIndex + 1]) % 1 !== 0) {
                         answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
-                            parseFloat(numbersForEquation[operationIndex + 1]));
+                            parseFloat(numbersForEquation[operationIndex + 1])).toFixed(2);
 
-                            console.log("A " + parseFloat(numbersForEquation[operationIndex - 1]));
-                            console.log("B "+ parseFloat(numbersForEquation[operationIndex + 1]));
+                            console.log("A " + parseFloat(numbersForEquation[operationIndex - 1]).toFixed(2));
+                            console.log("B "+ parseFloat(numbersForEquation[operationIndex + 1]).toFixed(2));
                     }
 
                     else {
