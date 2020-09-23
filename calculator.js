@@ -281,25 +281,30 @@ function wireButtons(button, index) {
                 if (operationsArray.length === 1) {
                     operationToUse = operationsArray[i];
                     let nextNumber = fullInputWord.substring(0, fullInputWord.indexOf(operationToUse));
+
                     if (nextNumber !== "") {
-                    numbersForEquation.push(nextNumber);
+                        numbersForEquation.push(nextNumber);
                     }
+
                     fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse), fullInputWord.length);
                     nextNumber = fullInputWord.substring(fullInputWord.indexOf(operationToUse), 1);
                     numbersForEquation.push(nextNumber);
                     fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse) + 1, fullInputWord.length);
                     nextNumber = fullInputWord;
+
                     if (nextNumber !== "") {
-                    numbersForEquation.push(nextNumber);
+                        numbersForEquation.push(nextNumber);
                     }
                 }
 
                 else {
                     operationToUse = operationsArray[i];
                     let nextNumber = fullInputWord.substring(0, fullInputWord.indexOf(operationToUse));
+
                     if (nextNumber !== "") {
-                    numbersForEquation.push(nextNumber);
+                        numbersForEquation.push(nextNumber);
                     }
+
                     fullInputWord = fullInputWord.slice(fullInputWord.indexOf(operationToUse), fullInputWord.length);
                     nextNumber = fullInputWord.substring(fullInputWord.indexOf(operationToUse), 1);
                     numbersForEquation.push(nextNumber);
@@ -308,7 +313,6 @@ function wireButtons(button, index) {
 
                     if (i === operationsArray.length - 1 && nextNumber !== "") {
                         numbersForEquation.push(nextNumber);
-                        console.log(numbersForEquation);
                     }
                 }
             }
@@ -328,99 +332,64 @@ function wireButtons(button, index) {
             });
             
             operationToUse = operationsArray[0];
-                let operationIndex = numbersForEquation.indexOf(operationToUse);
-                let allOperatorCheck = true;
+            let operationIndex = numbersForEquation.indexOf(operationToUse);
+            let allOperatorCheck = true;
+
+            for (i = 0; i < numbersForEquation.length - 1; i++) {
+                if (numbersForEquation[i] !== "+" && numbersForEquation[i] !== "-" &&
+                numbersForEquation[i] !== "*" && numbersForEquation[i] !== "/" && numbersForEquation[i] !== ".") {
+                    allOperatorCheck = false;
+                }
+            }
+
+            if (allOperatorCheck) {
+                numbersForEquation = [];
+            }
+
+            while (numbersForEquation.length > 1) {
+                if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0 ||
+                parseFloat(numbersForEquation[operationIndex + 1]) % 1 !== 0) {
+                    answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
+                        parseFloat(numbersForEquation[operationIndex + 1])).toFixed(2);
+
+                    screen.removeChild(screen.firstChild);
+                    let newChild = document.createElement("h2");
+                    newChild.innerHTML = answer;
+                    screen.appendChild(newChild);
+                }
+
+                else {
+                    answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
+                        parseInt(numbersForEquation[operationIndex + 1]));
+
+                    screen.removeChild(screen.firstChild);
+                    let newChild = document.createElement("h2");
+                    newChild.innerHTML = answer;
+                    screen.appendChild(newChild);
+                }
+
+                for (i = 0; i <= operationIndex + 1; i++) {
+                    if (operationIndex + 1 > 1) {
+                        numbersForEquation.shift();
+                    }
+                }
+
+                let changedOperation = false;
 
                 for (i = 0; i < numbersForEquation.length - 1; i++) {
-                    if (numbersForEquation[i] !== "+" && numbersForEquation[i] !== "-" &&
-                    numbersForEquation[i] !== "*" && numbersForEquation[i] !== "/" && numbersForEquation[i] !== ".") {
-                        allOperatorCheck = false;
-                    }
-                }
-
-                if (allOperatorCheck) {
-                    numbersForEquation = [];
-                }
-
-                while (numbersForEquation.length > 1) {
-                    if (parseFloat(numbersForEquation[operationIndex - 1]) % 1 !== 0 ||
-                    parseFloat(numbersForEquation[operationIndex + 1]) % 1 !== 0) {
-                        answer = operate(operationToUse, parseFloat(numbersForEquation[operationIndex - 1]),
-                            parseFloat(numbersForEquation[operationIndex + 1])).toFixed(2);
-                            
-                            if (isNaN(parseFloat(answer))) {
-                                answer = "ERROR";
-                            }
-
-                            screen.removeChild(screen.firstChild);
-                            let newChild = document.createElement("h2");
-                            newChild.innerHTML = answer;
-                            screen.appendChild(newChild);
-                    }
-
-                    else {
-                        answer = operate(operationToUse, parseInt(numbersForEquation[operationIndex - 1]),
-                            parseInt(numbersForEquation[operationIndex + 1]));
-
-                            if (isNaN(parseInt(answer))) {
-                                answer = "ERROR";
-                            }
-
-                            screen.removeChild(screen.firstChild);
-                            let newChild = document.createElement("h2");
-                            newChild.innerHTML = answer;
-                            screen.appendChild(newChild);
-                    }
-
-                    if (isNaN(parseFloat(numbersForEquation[operationIndex - 1])) ||
-                    isNaN(parseFloat(numbersForEquation[operationIndex + 1])) ||
-                    isNaN(parseInt(numbersForEquation[operationIndex - 1])) ||
-                    isNaN(parseInt(numbersForEquation[operationIndex + 1]))) {
-                        answer = "ERROR";
-
-                        screen.removeChild(screen.firstChild);
-                            let newChild = document.createElement("h2");
-                            newChild.innerHTML = answer;
-                            screen.appendChild(newChild);
-                    }
-
-                    for (i = 0; i <= operationIndex + 1; i++) {
-                        if (operationIndex + 1 > 1) {
-                        numbersForEquation.shift();
-                        }
-                    }
-
-                    let changedOperation = false;
-
-                    console.log(operationToUse);
-
-                    for (i = 0; i < numbersForEquation.length - 1; i++) {
-                        if (numbersForEquation[i] === "+" || numbersForEquation[i] === "-" ||
-                        numbersForEquation[i] === "*" || numbersForEquation[i] === "/") {
-                            if (!(changedOperation)) {
-                                if (answer !== "ERROR") {
+                    if (numbersForEquation[i] === "+" || numbersForEquation[i] === "-" ||
+                    numbersForEquation[i] === "*" || numbersForEquation[i] === "/") {
+                        if (!(changedOperation)) {
+                            if (answer !== "ERROR") {
                                 operationToUse = numbersForEquation[i];
                                 changedOperation = true;
                                 numbersForEquation.unshift(answer);
-                                }
-
-                                else {
-                                    if (numbersForEquation.length > 0) {
-                                    numbersForEquation = [answer];
-
-                                    screen.removeChild(screen.firstChild);
-                            let newChild = document.createElement("h2");
-                            newChild.innerHTML = answer;
-                            screen.appendChild(newChild);
-                                    }
-                                }
                             }
                         }
                     }
-
-                    console.log("end arr " + numbersForEquation);
                 }
             }
+        }
     });
 }
 
@@ -429,7 +398,6 @@ function pemdas(arr) {
     let finished = false;
     let switchHappened = false;
 
-    console.log("in " + arr);
     while (!(finished)) {
         if (pemdasArray.length > 1) {
             switchHappened = true;
@@ -443,66 +411,38 @@ function pemdas(arr) {
                             break;
                         }
 
-            if (pemdasArray[i] === "-" && i === 0) {
-                if (pemdasArray[j] !== "-") {
-                pemdasArray[j] = pemdasArray[i] + pemdasArray[j];
-                            pemdasArray.shift();
-                            console.log("first negative " + pemdasArray);
-                }
+                        if (pemdasArray[i] === "-" && i === 0) {
+                            if (pemdasArray[j] !== "-") {
+                                pemdasArray[j] = pemdasArray[i] + pemdasArray[j];
+                                pemdasArray.shift();
+                            }
+                        }
 
-                else {
-                    pemdasArray = ["ERROR"];
-                }
-            }
-
-            if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
-                if (pemdasArray[j] === "-" && i > 0) {
-                    if (j + 1 === pemdasArray.length - 1) {
-                        pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
-                        pemdasArray.pop();
-
-                        console.log("negative at end " + pemdasArray);
-                    }
-
+                        if (pemdasArray[i] === "+" || pemdasArray[i] === "-" || pemdasArray[i] === "*" || pemdasArray[i] === "/") {
+                            if (pemdasArray[j] === "-" && i > 0) {
+                                if (j + 1 === pemdasArray.length - 1) {
+                                    pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
+                                    pemdasArray.pop();
+                                }
                     
-                    if (pemdasArray[i] === "-" && pemdasArray[j] === "-" && j === i + 1) {
-                        pemdasArray[j + 1] = pemdasArray[j] + pemdasArray[j + 1];
-                        pemdasArray.splice(j, 1);
-
-                        console.log("double neg " + pemdasArray);
-                    }
-                        
-
-                    else {
-                        if (j + 1 < pemdasArray.length - 1) {
-                        pemdasArray[j] = pemdasArray[j] + pemdasArray[j + 1];
-                        pemdasArray.splice(j + 1, 1);
-                        }
-
-                        console.log("negative in middle of array " + pemdasArray);
+                                if (pemdasArray[j] === "-" && !(isNaN(pemdasArray[j + 1]))) {
+                                    pemdasArray[j + 1] = pemdasArray[j] + pemdasArray[j + 1];
+                                    pemdasArray.splice(j, 1);
+                                }
+                            }
                         }
                     }
                 }
+
+                if (compareArray === pemdasArray) {
+                    switchHappened = false;
+                }
             }
-        }
-
-    if (compareArray === pemdasArray) {
-        switchHappened = false;
-        console.log("finished negatives " + pemdasArray);
-        console.log("finished negatives " + pemdasArray[0]);
-        console.log("finished negatives " + pemdasArray[1]);
-    }
-}
-        }
-
-        if (pemdasArray.length === 1) {
-            console.log("single value " + pemdasArray[0]);
         }
 
         if (pemdasArray.length === 2) {
             if (pemdasArray[0] === "*" || pemdasArray[0] === "/" || pemdasArray[0] === "+") {
-                pemdasArray.unshift(0);
-                console.log("two val " + pemdasArray);
+                    pemdasArray.unshift(0);
             }
 
             if (pemdasArray[0] === "-") {
@@ -510,61 +450,43 @@ function pemdas(arr) {
                     pemdasArray[1] !== "+" && pemdasArray[1] !== "-" && pemdasArray[1] !== ".") {
                         pemdasArray[0] = pemdasArray[0] + pemdasArray[1];                  
                         pemdasArray.pop();
-                        console.log("two val " + pemdasArray);
-            }
+                }
 
-            if (pemdasArray[1] === ".") {
-                pemdasArray[0] = pemdasArray[0] + pemdasArray[1] + "0";
-                pemdasArray.pop();
-                console.log("two val " + pemdasArray);
+                if (pemdasArray[1] === ".") {
+                    pemdasArray[0] = pemdasArray[0] + pemdasArray[1] + "0";
+                    pemdasArray.pop();
+                }
             }
         }
-
-        if (pemdasArray[1] === "-") {
-            pemdasArray = ["ERROR"];
-            console.log("ERROR");
-        }
-        
-    }
 
         if (pemdasArray.length >= 3) {
             for (i = 0; i < pemdasArray.length - 1; i++) {
                 for (j = i + 1; j < pemdasArray.length - 1; j++) {
-                        if (pemdasArray[j] === "*" || pemdasArray[j] === "/") {
-                            if (pemdasArray[i] === "+" || pemdasArray[i] === "-") {
-                                if (parseFloat(pemdasArray[j - 1]) % 1 !== 0 || parseFloat(pemdasArray[j + 1]) % 1 !== 0) {
+                    if (pemdasArray[j] === "*" || pemdasArray[j] === "/") {
+                        if (pemdasArray[i] === "+" || pemdasArray[i] === "-") {
+                            if (parseFloat(pemdasArray[j - 1]) % 1 !== 0 || parseFloat(pemdasArray[j + 1]) % 1 !== 0) {
                                 pemdasArray[j + 1] = operate(pemdasArray[j], parseFloat(pemdasArray[j - 1]), parseFloat(pemdasArray[j + 1])).toFixed(2);
-                                }
-
-                                else {
-                                    pemdasArray[j + 1] = operate(pemdasArray[j], parseInt(pemdasArray[j - 1]), parseInt(pemdasArray[j + 1]));
-                                }
-                                pemdasArray.splice(j - 1, 2);
-                                j = i + 1;
-                                
-                                switchHappened = true;
-
-                                console.log("after replace " + pemdasArray);
                             }
-                        }
 
-                        if (!(switchHappened) || i === pemdasArray.length) {
-                            finished = true;
-                        }
+                            else {
+                                pemdasArray[j + 1] = operate(pemdasArray[j], parseInt(pemdasArray[j - 1]), parseInt(pemdasArray[j + 1]));
+                            }
 
-                        switchHappened = false;
-                    }
-                }
-
-                if (pemdasArray.length === 3) {
-                    if (pemdasArray[0] === "-" || pemdasArray[0] === "+" ||
-                    pemdasArray[0] === "*" || pemdasArray[0] === "/") {
-                        if (!(isNaN(pemdasArray[pemdasArray.length]))) {
-                            pemdasArray = ["ERROR"];
+                            pemdasArray.splice(j - 1, 2);
+                            j = i + 1;
+                            
+                            switchHappened = true;
                         }
                     }
+
+                    if (!(switchHappened) || i === pemdasArray.length) {
+                        finished = true;
+                    }
+
+                    switchHappened = false;
                 }
             }
+        }
 
         else {
             finished = true;
@@ -572,16 +494,6 @@ function pemdas(arr) {
         }
     }
 
-    if (pemdasArray[0] === "+" || pemdasArray[0] === "-" ||
-    pemdasArray[0] === "*" || pemdasArray[0] === "/" || pemdasArray[0] === "." || pemdasArray.length === 0) {
-        pemdasArray = ["ERROR"];
-    }
-
-    if (pemdasArray.length === 0) {
-        pemdasArray = ["ERROR"];
-    }
-
-    console.log("out " + pemdasArray);
     return pemdasArray;
 }
 
